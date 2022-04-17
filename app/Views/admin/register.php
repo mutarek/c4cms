@@ -1,11 +1,13 @@
-<?php $this->extend('admin/static/base'); ?>
+<?php $this->extend('admin/static/base'); 
+$session = \Config\Services::session();
+?>
 
 
 <?php $this->section('content'); ?>
 <div>
 <?= form_open(); ?>
 <div class="imgcontainer">
-    <img src="img_avatar2.png" alt="Avatar" class="avatar">
+    <img src="<?= base_url(); ?>/public/assets/logo.png" alt="Avatar" height="100px" width="100px">
   </div>
 
   <div class="container">
@@ -41,6 +43,9 @@
   </div>
 <?= form_close(); ?>
 </div>
+<?php if($session->getTempData('smsg')): ?>
+<h1><?= $session->getTempdata('smsg'); ?></h1>
+  <?php endif; ?>
 
 
 <?php $this->endSection(); ?>

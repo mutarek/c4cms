@@ -39,8 +39,25 @@ class Admin extends Controller
                 $response = $registermodel->insert_data($mydata);
                 if($response)
                 {
-                    $session->setTempdata('smsg',"Success",3);
-                    return redirect()->to(current_url());
+                    $to = $this->request->getVar('email');
+                    $subject = 'Account Activation Link - Dhaka City';
+                    $msg = "Hey!".$this->request->getVar('uname',FILTER_SANITIZE_STRING)."<br> <br> For Activate your valuable account . Please click the link below <br> <br>"
+                    ."<a href='".base_url()."/admin/activate/".$uniid."'>Activate Now </a><br><br>";
+                    $email = \Config\Services::email();
+                    $email->setTo($to);
+                    $email->setFrom('bangladeshtourist@gmail.com','Info');
+                    $email->setSubject($subject);
+                    $email->setMessage($msg);
+                    if($email->send())
+                    {
+                        $session->setTempdata('smsg','Account Create Successfully,Please Activate your account',3);
+                        return redirect()->to(current_url());
+                    }
+                    else
+                    {
+                        $data = $email->printDebugger(['headers']);
+                        print_r($data);
+                    }
                 }
                 else
                 {
@@ -54,5 +71,18 @@ class Admin extends Controller
             }
         }
         return view('admin/register',$data);
+    }
+    public function activate($uid=null)
+    {
+        $data = [];
+        if(!empty($uid))
+        {
+
+        }
+        else
+        {
+            $data['errors'] = "Sorry! Unable to process your request";
+        }
+        return view('admin/activate_view',$data);
     }
 }
