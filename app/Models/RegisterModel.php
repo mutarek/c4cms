@@ -17,4 +17,21 @@ class RegisterModel extends Model
             return false;
         }
     }
+    public function verifyUniid($uuid)
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('users');
+        $builder->select('activation_date,uid,status');
+        $builder->where('uid',$uuid);
+        $result = $builder->get();
+        if($builder->countAll() == 1)
+        {
+            return $result->getRow();
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 }

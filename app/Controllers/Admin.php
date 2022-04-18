@@ -7,6 +7,7 @@ class Admin extends Controller
 {
     public function __construct() {
         helper('form');
+        helper('date');
     }
     public function index()
     {
@@ -77,12 +78,43 @@ class Admin extends Controller
         $data = [];
         if(!empty($uid))
         {
-
+            $rmodel = new RegisterModel();
+            $result = $rmodel->verifyUniid($uid);
+            if($result)
+            {
+                if($this->verifyTime($result->activation_date))
+                {
+                    echo "Okey";
+                }
+                else
+                {
+                    $data['errors'] = "Sorry! Your Activation Time is expired ,Contact Admin";
+                }
+            }
+            else
+            {
+                $data['errors'] = "Sorry! Your Link is not Available";
+            }
         }
         else
         {
             $data['errors'] = "Sorry! Unable to process your request";
         }
         return view('admin/activate_view',$data);
+    }
+    public function verifyTime($regtime)
+    {
+        $current_time = now();
+        $reg =  strtotime($regtime);
+        $differnce = (int)$current_time - (int)$reg;
+        print_r($differnce);
+        if($differnce < 60)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
