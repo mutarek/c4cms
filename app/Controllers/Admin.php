@@ -84,7 +84,7 @@ class Admin extends Controller
             {
                 if($this->verifyTime($result->activation_date))
                 {
-                    echo "Okey";
+                    
                 }
                 else
                 {
