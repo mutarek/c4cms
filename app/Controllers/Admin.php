@@ -105,9 +105,12 @@ class Admin extends Controller
     public function verifyTime($regtime)
     {
         $current_time = now();
+        echo $current_time."<br>";
         $reg =  strtotime($regtime);
-        $differnce = (int)$current_time - (int)$reg;
-        print_r($differnce);
+        echo $regtime."<br>";
+        $differnce = $current_time - $reg;
+        echo $differnce;
+        
         if($differnce < 60)
         {
             return true;
